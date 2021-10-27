@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const antreanRouter = require("./routes/antrean");
 
 const refreshTokensRouter = require("./routes/refreshTokens");
 
@@ -24,7 +25,7 @@ app.use(cors("*"));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-// app.use("/media", verifyToken, can("admin", "student"), mediaRouter);
 app.use("/refresh-tokens", refreshTokensRouter);
+app.use("/antrean", verifyToken, can("admin", "bpjs"), antreanRouter);
 
 module.exports = app;
