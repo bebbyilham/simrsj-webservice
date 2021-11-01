@@ -6,9 +6,11 @@ const antreanHandler = require("./handler/antrean");
 const verifyToken = require("../middleware/verifyToken");
 const can = require("../middleware/permission");
 
-// router.get("/", antreanHandler.getAll);
-// router.get("/:id", antreanHandler.get);
-
-router.post("/",verifyToken,can("admin", "bpjs"),antreanHandler.ambilAntrean);
+router.post("/ambilantrean",verifyToken,can("admin", "bpjs"),antreanHandler.ambilAntrean);
+router.post("/statusantrean",verifyToken,can("admin", "bpjs"),antreanHandler.statusAntrean);
+router.post("/sisaantrean",verifyToken,can("admin", "bpjs"),antreanHandler.sisaAntrean);
+router.post("/batalantrean",verifyToken,can("admin", "bpjs"),antreanHandler.batalAntrean);
+router.post("/checkin",verifyToken,can("admin", "bpjs"),antreanHandler.checkIn);
+router.post("/infopasienbaru",verifyToken,can("admin", "bpjs"),antreanHandler.infoPasienbaru);
 
 module.exports = router;

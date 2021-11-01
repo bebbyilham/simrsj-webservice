@@ -32,7 +32,8 @@ module.exports = async(req, res) => {
             status: 'success',
             data: {
                 token,
-                refresh_token: refreshToken
+                refresh_token: refreshToken,
+                username:data.username
             }
         });
 
