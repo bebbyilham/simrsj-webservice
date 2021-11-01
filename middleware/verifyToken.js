@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
         if (err) {
             return res.status(403).json({ message: err.message });
         }
-        if (username!="bpjs") {
+        if (username!='bpjs' && username!='admin') {
             return res.status(403).json({ message: "username tidak terdaftar" });
         }
         req.user = decoded;
