@@ -1,7 +1,7 @@
 const apiAdapter = require('../../apiAdapter');
 const jwt = require('jsonwebtoken');
 const {
-    URL_SERVICE_USER,
+    URL_SERVICE_ANTREAN,
     JWT_SECRET,
     JWT_SECRET_REFRESH_TOKEN,
     JWT_ACCESS_TOKEN_EXPIRED,
@@ -9,13 +9,13 @@ const {
 } = process.env;
 
 //variabel  panggil adapter dg parameter base_url
-const api = apiAdapter(URL_SERVICE_USER);
+const api = apiAdapter(URL_SERVICE_ANTREAN);
 
 
 //integrasi api gateway create/post user
 module.exports = async(req, res) => {
     try {
-        const user = await api.post('/users/login', req.body);
+        const user = await api.post('/api/users/login', req.body);
         const data = user.data.data;
 
         const token = jwt.sign({ data }, JWT_SECRET, { expiresIn: JWT_ACCESS_TOKEN_EXPIRED });
@@ -24,7 +24,7 @@ module.exports = async(req, res) => {
         //ketika telah berhasil membuat token dan refreshtoken
         //maka refreshtoken akan tersimpan di tabel refreshtoken yang berada di SERVICE USER
         //berikut cara memanggilnya
-        await api.post('/refresh_tokens', { refresh_token: refreshToken, user_id: data.id });
+        await api.post('/api/refresh_tokens', { refresh_token: refreshToken, user_id: data.id });
 
         //setelah kedua token tersimpan
         //memberi respon ke fontend agar bisa digunakan oleh frontend

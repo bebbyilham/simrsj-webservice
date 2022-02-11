@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 const apiAdapter = require("../../apiAdapter");
 const {
-  URL_SERVICE_USER,
+  URL_SERVICE_ANTREAN,
   JWT_SECRET,
   JWT_SECRET_REFRESH_TOKEN,
   JWT_ACCESS_TOKEN_EXPIRED,
 } = process.env;
 
 //variabel  panggil adapter dg parameter base_url
-const api = apiAdapter(URL_SERVICE_USER);
+const api = apiAdapter(URL_SERVICE_ANTREAN);
 
 //integrasi api gateway create/post user
 module.exports = async (req, res) => {
@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
 
     //pengecekan refreshtoken pada database
     //yg memerlukan service user
-    await api.get("/refresh_tokens", {
+    await api.get("/api/refresh_tokens", {
       params: { refresh_token: refreshToken },
     });
 
