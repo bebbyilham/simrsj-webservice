@@ -52,10 +52,15 @@ module.exports = async (req, res) => {
     if (error.code === "ECONNREFUSED") {
       return res
         .status(500)
-        .json({ status: "error", messaga: "service unavailable" });
+        .json({ status: "error", message: "service unavailable" });
     }
 
-    const { status, data } = error.response;
-    return res.status(status).json(data);
+    // const { status, data } = error.response;
+    return res.status(201).json({
+      metadata: {
+        message: "Username atau Password Tidak Sesuai",
+        code: 201,
+      },
+    });
   }
 };

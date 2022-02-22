@@ -13,7 +13,12 @@ module.exports = async (req, res, next) => {
     jwt.verify(token, JWT_SECRET, function (err, decoded) {
         
         if (err) {
-            return res.status(403).json({ message: err.message });
+            return res.status(201).json({
+        metadata: {
+        message: "Token Expired",
+        code: 201,
+      },
+    });
         }
         if (username!='bpjs' && username!='admin') {
             return res.status(403).json({ message: "username tidak terdaftar" });
