@@ -8,6 +8,11 @@ const cors = require("cors");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const antreanRouter = require("./routes/antrean");
+const bpjsRouter = require("./routes/bpjs");
+const pasienRouter = require("./routes/pasien");
+const poliRouter = require("./routes/poli");
+const pendaftaranRouter = require("./routes/pendaftaran");
+const dokterRouter = require("./routes/dokter");
 
 const refreshTokensRouter = require("./routes/refreshTokens");
 
@@ -27,5 +32,10 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/refresh-tokens", refreshTokensRouter);
 app.use("/antrean", verifyToken, can("admin", "bpjs"), antreanRouter);
+app.use("/pasien", pasienRouter);
+app.use("/bpjs", bpjsRouter);
+app.use("/poli", poliRouter);
+app.use("/pendaftaran", pendaftaranRouter);
+app.use("/dokter", dokterRouter);
 
 module.exports = app;
