@@ -1,9 +1,11 @@
-const cekkartu = require('./cekKartu');
-const dokter = require('./dokter');
-const jadwaldokter = require('./jadwalDokter');
+const cekkartu = require("./cekKartu");
+const dokter = require("./dokter");
+const jadwaldokter = require("./jadwalDokter");
+const cekrujukan = require("./cekRujukan");
 
 module.exports = {
-    cekkartu,
-    dokter,
-    jadwaldokter
-}
+  cekkartu,
+  dokter,
+  jadwaldokter,
+  cekrujukan,
+};
