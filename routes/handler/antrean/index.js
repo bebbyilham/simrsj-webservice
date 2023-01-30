@@ -4,6 +4,7 @@ const sisaAntrean = require("./sisaAntrean");
 const batalAntrean = require("./batalAntrean");
 const checkIn = require("./checkIn");
 const infoPasienbaru = require("./infoPasienbaru");
+const statusAntreanFarmasi = require("./statusAntreanFarmasi");
 
 module.exports = {
   ambilAntrean,
@@ -12,4 +13,5 @@ module.exports = {
   batalAntrean,
   checkIn,
   infoPasienbaru,
+  statusAntreanFarmasi,
 };

@@ -42,6 +42,12 @@ router.post(
   can("admin", "bpjs"),
   antreanHandler.infoPasienbaru
 );
+router.post(
+  "/statusantreanfarmasi",
+  verifyToken,
+  can("admin", "bpjs"),
+  antreanHandler.statusAntreanFarmasi
+);
 // router.get("/:norm/:tanggalperiksa", antreanHandler.cariAntrean); //cari antrean
 
 module.exports = router;
