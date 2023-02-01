@@ -22,8 +22,8 @@ const can = require("./middleware/permission");
 const app = express();
 
 app.use(logger("dev"));
-app.use(express.json({ limit: "50mb" })); //limit 50mb
-app.use(express.urlencoded({ extended: false, limit: "50mb" })); //limit 50mb
+app.use(express.json({ limit: "500mb" })); //limit 500mb
+app.use(express.urlencoded({ extended: false, limit: "500mb" })); //limit 500mb
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors("*"));

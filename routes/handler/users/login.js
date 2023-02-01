@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
     // const { status, data } = error.response;
     return res.status(201).json({
       metadata: {
-        message: "Username atau Password Tidak Sesuai",
+        message: "Server RS Bermasalah",
         code: 201,
       },
     });
