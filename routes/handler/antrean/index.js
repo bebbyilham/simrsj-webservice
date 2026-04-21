@@ -5,6 +5,7 @@ const batalAntrean = require("./batalAntrean");
 const checkIn = require("./checkIn");
 const infoPasienbaru = require("./infoPasienbaru");
 const statusAntreanFarmasi = require("./statusAntreanFarmasi");
+const infoTempatTidur = require("./infoTempatTidur");
 
 module.exports = {
   ambilAntrean,
@@ -14,4 +15,5 @@ module.exports = {
   checkIn,
   infoPasienbaru,
   statusAntreanFarmasi,
+  infoTempatTidur,
 };

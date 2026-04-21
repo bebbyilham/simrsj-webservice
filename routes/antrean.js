@@ -48,6 +48,12 @@ router.post(
   can("admin", "bpjs"),
   antreanHandler.statusAntreanFarmasi
 );
+router.get(
+  "/infotempattidur",
+  // verifyToken,
+  // can("admin", "bpjs"),
+  antreanHandler.infoTempatTidur
+);
 // router.get("/:norm/:tanggalperiksa", antreanHandler.cariAntrean); //cari antrean
 
 module.exports = router;
