@@ -50,8 +50,8 @@ router.post(
 );
 router.get(
   "/infotempattidur",
-  // verifyToken,
-  // can("admin", "bpjs"),
+  verifyToken,
+  can("admin", "bpjs"),
   antreanHandler.infoTempatTidur
 );
 // router.get("/:norm/:tanggalperiksa", antreanHandler.cariAntrean); //cari antrean
