@@ -15,6 +15,7 @@ const pendaftaranRouter = require("./routes/pendaftaran");
 const dokterRouter = require("./routes/dokter");
 
 const refreshTokensRouter = require("./routes/refreshTokens");
+const tarifRouter = require("./routes/tarif");
 
 const verifyToken = require("./middleware/verifyToken");
 const can = require("./middleware/permission");
@@ -37,5 +38,6 @@ app.use("/bpjs", bpjsRouter);
 app.use("/poli", poliRouter);
 app.use("/pendaftaran", pendaftaranRouter);
 app.use("/dokter", dokterRouter);
+app.use("/tarif", tarifRouter);
 
 module.exports = app;
