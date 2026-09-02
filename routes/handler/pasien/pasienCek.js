@@ -9,7 +9,8 @@ module.exports = async (req, res) => {
   try {
     const id = req.params.id;
     const tlahir = req.params.tlahir;
-    const pasien = await api.get(`/api/pasiens/${id}/${tlahir}`);
+    const url = tlahir ? `/api/pasiens/${id}/${tlahir}` : `/api/pasiens/${id}`;
+    const pasien = await api.get(url);
     return res.json(pasien.data);
   } catch (error) {
     if (error.code === "ECONNREFUSED") {
@@ -18,7 +19,7 @@ module.exports = async (req, res) => {
         .json({ status: "error", message: "service unavailable" });
     }
 
-    const { status, data } = error.response;
+    const { status, data } = error.response || { status: 500, data: { status: "error", message: "Error" } };
     return res.status(status).json(data);
   }
 };

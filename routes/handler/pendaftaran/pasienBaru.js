@@ -10,13 +10,10 @@ module.exports = async (req, res) => {
     const pendaftaran = await api.post("/api/pendaftaranonline/pasienbaru", req.body);
     return res.json(pendaftaran.data);
   } catch (error) {
-    if (error.code === "ECONNREFUSED") {
-      return res
-        .status(500)
-        .json({ status: "error", message: "service unavailable" });
+    if (error.response) {
+      const { status, data } = error.response;
+      return res.status(status).json(data);
     }
-
-    const { status, data } = error.response;
-    return res.status(status).json(data);
+    return res.status(500).json({ status: "error", message: error.message || "internal server error" });
   }
 };

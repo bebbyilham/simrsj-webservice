@@ -14,11 +14,10 @@ module.exports = async(req, res) => {
         return res.json(poli.data);
     } catch (error) {
 
-        if (error.code === 'ECONNREFUSED') {
-            return res.status(500).json({ status: 'error', message: 'service unavailable' });
+        if (error.response) {
+            const { status, data } = error.response;
+            return res.status(status).json(data);
         }
-
-        const { status, data } = error.response;
-        return res.status(status).json(data);
+        return res.status(500).json({ status: 'error', message: error.message || 'internal server error' });
     }
 }

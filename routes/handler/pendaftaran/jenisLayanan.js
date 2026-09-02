@@ -10,13 +10,10 @@ module.exports = async (req, res) => {
     const dokter = await api.get("/api/pendaftaranonline/jenislayanan");
     return res.json(dokter.data);
   } catch (error) {
-    if (error.code === "ECONNREFUSED") {
-      return res
-        .status(500)
-        .json({ status: "error", message: "service unavailable" });
+    if (error.response) {
+      const { status, data } = error.response;
+      return res.status(status).json(data);
     }
-
-    const { status, data } = error.response;
-    return res.status(status).json(data);
+    return res.status(500).json({ status: "error", message: error.message || "internal server error" });
   }
 };
