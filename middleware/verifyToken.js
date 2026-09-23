@@ -6,24 +6,41 @@ const { JWT_SECRET, URL_SERVICE_USER } = process.env;
 
 
 module.exports = async (req, res, next) => {
-    
     const username = req.headers['x-username'];
-    const token = req.headers['x-token'];
-    // const token = req.headers.authorization;
-    jwt.verify(token, JWT_SECRET, function (err, decoded) {
-        
+    const token = req.headers['x-token'] || req.headers.authorization;
+
+    if (!token) {
+        return res.status(200).json({
+            metadata: {
+                message: "Token tidak boleh kosong (Header x-token wajib ada)",
+                code: 201,
+            },
+        });
+    }
+
+    // Jika token dikirim dengan format 'Bearer <token>'
+    const cleanToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+    jwt.verify(cleanToken, JWT_SECRET, function (err, decoded) {
         if (err) {
-            return res.status(201).json({
-        metadata: {
-        message: "Token Expired",
-        code: 201,
-      },
-    });
+            return res.status(200).json({
+                metadata: {
+                    message: "Token Expired / Tidak Valid",
+                    code: 201,
+                },
+            });
         }
-        if (username!='bpjs' && username!='admin') {
-            return res.status(403).json({ message: "username tidak terdaftar" });
+
+        if (username && username !== 'bpjs' && username !== 'admin') {
+            return res.status(200).json({
+                metadata: {
+                    message: "Username Tidak Sesuai",
+                    code: 201,
+                },
+            });
         }
+
         req.user = decoded;
         return next();
     });
-}
+};

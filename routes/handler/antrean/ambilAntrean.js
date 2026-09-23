@@ -1,22 +1,16 @@
 const apiAdapter = require("../../apiAdapter");
+const errorHandler = require("../errorHandler");
 const { URL_SERVICE_ANTREAN } = process.env;
 
-//variabel  panggil adapter dg parameter base_url
 const api = apiAdapter(URL_SERVICE_ANTREAN);
 
-//integrasi api gateway ambil antrean
 module.exports = async (req, res) => {
   try {
-    const antrean = await api.post("/api/antrean/ambilantrean", req.body);
+    const antrean = await api.post("/api/antrean/ambilantrean", req.body, {
+      headers: req.headers,
+    });
     return res.json(antrean.data);
   } catch (error) {
-    if (error.code === "ECONNREFUSED") {
-      return res
-        .status(500)
-        .json({ status: "error", message: "service unavailable" });
-    }
-
-    const { status, data } = error.response;
-    return res.status(status).json(data);
+    return errorHandler(error, res);
   }
 };

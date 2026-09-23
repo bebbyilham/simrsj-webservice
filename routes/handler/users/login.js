@@ -14,11 +14,40 @@ const api = apiAdapter(URL_SERVICE_ANTREAN);
 //integrasi api gateway create/post user
 module.exports = async (req, res) => {
   try {
-    // const username = req.headers["x-username"];
-    // const password = req.headers["x-password"];
-    // const user = await api.post('/api/users/login', req.body);
-    const user = await api.post("/api/users/login", req.headers);
-    const data = user.data.data;
+    const username = req.headers["x-username"] || req.body["x-username"] || req.body.username;
+    const password = req.headers["x-password"] || req.body["x-password"] || req.body.password;
+
+    if (!username || !password) {
+      return res.status(200).json({
+        metadata: {
+          message: "Header atau parameter x-username dan x-password tidak boleh kosong",
+          code: 201,
+        },
+      });
+    }
+
+    const payload = {
+      "x-username": username,
+      "x-password": password,
+    };
+
+    // Forward request ke backend Laravel
+    const user = await api.post("/api/users/login", payload, {
+      headers: {
+        "x-username": username,
+        "x-password": password,
+      },
+    });
+
+    // Cek jika response dari backend mengindikasikan kegagalan autentikasi
+    if (user.data && user.data.metadata && user.data.metadata.code !== 200) {
+      return res.status(200).json(user.data);
+    }
+
+    const data = user.data.data || user.data.response;
+    if (!data) {
+      return res.status(200).json(user.data);
+    }
 
     const token = jwt.sign({ data }, JWT_SECRET, {
       expiresIn: JWT_ACCESS_TOKEN_EXPIRED,
@@ -27,16 +56,18 @@ module.exports = async (req, res) => {
       expiresIn: JWT_REFRESH_TOKEN_EXPIRED,
     });
 
-    //ketika telah berhasil membuat token dan refreshtoken
-    //maka refreshtoken akan tersimpan di tabel refreshtoken yang berada di SERVICE USER
-    //berikut cara memanggilnya
-    await api.post("/api/refresh_tokens", {
-      refresh_token: refreshToken,
-      user_id: data.id,
-    });
+    // Simpan refreshToken ke backend jika user_id tersedia
+    if (data.id) {
+      try {
+        await api.post("/api/refresh_tokens", {
+          refresh_token: refreshToken,
+          user_id: data.id,
+        });
+      } catch (err) {
+        // Abaikan jika service refresh token gagal agar tidak memutus login
+      }
+    }
 
-    //setelah kedua token tersimpan
-    //memberi respon ke fontend agar bisa digunakan oleh frontend
     return res.json({
       response: {
         token,
@@ -46,19 +77,23 @@ module.exports = async (req, res) => {
         code: 200,
       },
     });
-
-    return res.json(user.data);
   } catch (error) {
-    if (error.code === "ECONNREFUSED") {
-      return res
-        .status(500)
-        .json({ status: "error", message: "service unavailable" });
+    if (error.response && error.response.data) {
+      return res.status(error.response.status || 200).json(error.response.data);
     }
 
-    // const { status, data } = error.response;
-    return res.status(201).json({
+    if (error.code === "ECONNABORTED") {
+      return res.status(200).json({
+        metadata: {
+          message: "Waktu tunggu login habis (Timeout)",
+          code: 201,
+        },
+      });
+    }
+
+    return res.status(200).json({
       metadata: {
-        message: "Server RS Bermasalah",
+        message: "Server RS Bermasalah / Service Unavailable",
         code: 201,
       },
     });
